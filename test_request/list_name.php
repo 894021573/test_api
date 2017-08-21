@@ -7,6 +7,6 @@
  */
 require_once '../processed_class/demo/a/Demo.php';
 
-$d = new project\Demo();
+$d = new Demo();
 
 $d->listName();

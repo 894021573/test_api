@@ -36,6 +36,7 @@ $ajaxUrl = $config['ajax_url']; // guzzle.php 请求url
     <link href="./assets/json/json.css" rel="stylesheet" type="text/css">
 
     <script src="./assets/json/c.js" type="text/javascript"></script>
+    <script src="./assets/js/clipboard.js-master/dist/clipboard.min.js" type="text/javascript"></script>
     <link href="./assets/json/s.css" type="text/css" rel="stylesheet">
 </head>
 <body>
@@ -43,7 +44,7 @@ $ajaxUrl = $config['ajax_url']; // guzzle.php 请求url
 <div class="container" style="margin-left: 0;background-color: #eee">
     <p>接口名：<?php echo isset($controller['title']) ? $controller['title'] : ''; ?><?php echo "----------"?><?php echo isset($method['description']) ? $method['description'] : ''; ?></p>
     <p class="text-primary">路径：<?php echo isset($controller['file_path']) ? $controller['file_path'] : ''; ?></p>
-    <p class="text-warning">请求URL：<?php echo $methodType. '    ' .$apiUrl; ?></p>
+    <p class="text-success">请求URL：<?php echo "<span class='text-danger'>【{$methodType}】</span>" . '    ' ."<span id='url'>$apiUrl</span>"; ?>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-danger btn-sm" id="copy_url" data-clipboard-action="copy" data-clipboard-target="#url">点击复制</button></p>
 
     <ul id="myTab" class="nav nav-tabs">
         <li id="tab_info" class="active"><a href="#info" data-toggle="tab">接口详情</a></li>
@@ -246,6 +247,17 @@ $ajaxUrl = $config['ajax_url']; // guzzle.php 请求url
 <!--<script type="text/javascript" src="./assets/json/m.js"></script>-->
 <script type="text/javascript">
     $(function () {
+        var clipboard = new Clipboard('#copy_url');
+        clipboard.on('success', function (e) {
+            console.log(e);
+            alert("复制成功！")
+        });
+        clipboard.on('error', function (e) {
+            console.log(e);
+            alert("复制失败！请手动复制")
+        });
+
+
         if ($("#test").is(":hidden")) {
             $("#RawJson").hide();
             $("#format_json").hide();

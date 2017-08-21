@@ -10,6 +10,20 @@ $header = $_POST['header'];
 $arrayParam = isset($_POST['array_param']) ? $_POST['array_param'] : [];
 $fileParam = isset($_POST['file_param']) ? $_POST['file_param'] : [];
 
+// Guzzle 中，GET请求，带参数的url，参数会被忽略，因此在这里提取出来，后面一起传到query参数中
+$parseUrl = parse_url($_POST['url']);
+$get = isset($parseUrl['query']) ? $parseUrl['query'] : '' ;
+if(!empty($get))
+{
+    $gets = explode('&',$get);
+    foreach ($gets as $v)
+    {
+        list($getKey,$getVal) = explode('=',$v);
+        $_GET[$getKey] = $getVal;
+    }
+}
+
+
 unset($_POST['url']);
 unset($_POST['method_type']);
 unset($_POST['cookie']);
@@ -78,7 +92,7 @@ foreach ($_POST as $k => $v)
 // 3.设置options
 if ($methodType == 'GET') // GET请求数据
 {
-    $options['query'] = $_POST;
+    $options['query'] = array_merge($_GET,$_POST);
 } else // POST请求数据
 {
     // POST数据之多维数组处理
